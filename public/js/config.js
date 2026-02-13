@@ -4,6 +4,10 @@
 
 window.ETSI = window.ETSI || {};
 
+// API configuration for direct browser calls
+window.ETSI.API_MODEL = 'claude-sonnet-4-5-20250929';
+window.ETSI.API_MAX_TOKENS = 12000;
+
 window.ETSI.PERSONAS = [
   { id:1,  nom:"Inès", profil:"Étudiante boursière", age:21, revenu:600, decile:"D1", loc:"Ville universitaire", color:"#6366f1" },
   { id:2,  nom:"Karim", profil:"Jeune actif CDI", age:28, revenu:2100, decile:"D5", loc:"Grande métropole", color:"#8b5cf6" },

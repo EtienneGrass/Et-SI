@@ -211,7 +211,7 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // ---- Streaming Chat ----
+  // ---- Streaming Chat (direct Anthropic API call) ----
   async function sendMessage(userText) {
     if (state.streaming || !userText.trim()) return;
 
@@ -232,18 +232,33 @@
     let fullText = '';
 
     try {
-      const resp = await fetch('/api/chat', {
+      const systemPrompt = window.ETSI.getSystemPrompt();
+
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
         body: JSON.stringify({
-          messages: state.messages,
-          apiKey: apiKey
+          model: window.ETSI.API_MODEL,
+          max_tokens: window.ETSI.API_MAX_TOKENS,
+          system: systemPrompt,
+          stream: true,
+          messages: state.messages.map(function(m) {
+            return { role: m.role, content: m.content };
+          })
         })
       });
 
       if (!resp.ok) {
-        const err = await resp.json().catch(() => ({ error: 'Erreur réseau' }));
-        throw new Error(err.error || `Erreur ${resp.status}`);
+        const err = await resp.json().catch(function() { return { error: { message: 'Erreur réseau' } }; });
+        var errMsg = (err.error && err.error.message) || 'Erreur ' + resp.status;
+        if (resp.status === 401) errMsg = 'Clé API invalide';
+        if (resp.status === 429) errMsg = 'Trop de requêtes — réessayez dans un instant';
+        throw new Error(errMsg);
       }
 
       const reader = resp.body.getReader();
@@ -266,13 +281,12 @@
 
           try {
             const data = JSON.parse(payload);
-            if (data.error) throw new Error(data.error);
-            if (data.text) {
-              fullText += data.text;
+            if (data.type === 'content_block_delta' && data.delta && data.delta.text) {
+              fullText += data.delta.text;
               updateAssistantMessage(assistantDiv, fullText);
             }
           } catch (e) {
-            if (e.message && !e.message.includes('JSON')) throw e;
+            // ignore JSON parse errors for non-data lines
           }
         }
       }
@@ -285,7 +299,7 @@
       if (!fullText) {
         assistantDiv.remove();
       }
-      addErrorMessage(err.message || 'Erreur de communication avec le serveur');
+      addErrorMessage(err.message || 'Erreur de communication avec l\'API');
     } finally {
       state.streaming = false;
       dom.chatInput.disabled = false;
