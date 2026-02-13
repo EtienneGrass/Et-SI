@@ -1,67 +1,99 @@
 # Et-SI — Simulateur de Réformes de Politiques Publiques
 
-**Et si…** on pouvait tester l'impact d'une réforme avant de la mettre en œuvre ?
+**Et si…** on pouvait tester l'impact d'une réforme avant de la mettre en oeuvre ?
 
-Et-SI est un modèle conversationnel d'analyse d'impact de politiques publiques françaises. Il prend en entrée la description informelle d'une réforme et produit une analyse structurée, quantifiée et traçable.
+Et-SI est une application mobile (PWA) conversationnelle d'analyse d'impact de politiques publiques françaises. Décrivez une réforme en langage naturel et obtenez une analyse structurée, quantifiée et traçable.
 
 ---
 
 ## Ce que fait Et-SI
 
-À partir d'une description en langage naturel d'une réforme, le modèle produit :
-
-1. **Analyse par personas** — Impact concret sur 20 profils types représentatifs de la société française (étudiante, ouvrier, cadre, agricultrice, retraitée, parent isolé, etc.)
-2. **Analyse microéconomique** — Effets sur les ménages (par décile), entreprises, comportements de consommation, marchés
-3. **Analyse macroéconomique** — PIB, emploi, finances publiques, environnement, santé publique, inégalités
+1. **Analyse par personas** — Impact concret sur 20 profils types (de l'étudiante boursière au cadre supérieur)
+2. **Analyse microéconomique** — Effets sur les ménages (par décile), entreprises, comportements
+3. **Analyse macroéconomique** — PIB, emploi, finances publiques, environnement, santé
 4. **Projection temporelle** — Impacts à 1 an, 3 ans et 10 ans
-5. **Traçabilité complète** — Chaque chiffre est accompagné de ses hypothèses, sources et niveau de confiance
+5. **Traçabilité** — Chaque chiffre avec ses hypothèses, sources et niveau de confiance
+
+## Démarrage rapide
+
+### Prérequis
+
+- **Node.js** >= 18
+- Une **clé API Anthropic** (Claude)
+
+### Installation
+
+```bash
+git clone https://github.com/EtienneGrass/Et-SI.git
+cd Et-SI
+npm install
+```
+
+### Lancement
+
+```bash
+# Option 1 : clé API en variable d'environnement
+ANTHROPIC_API_KEY=sk-ant-... npm start
+
+# Option 2 : fichier .env
+cp .env.example .env
+# Éditez .env avec votre clé
+npm start
+```
+
+L'app est accessible sur `http://localhost:3000`.
+
+Vous pouvez aussi configurer la clé API directement dans l'app (Paramètres) — elle est stockée localement sur l'appareil.
+
+### Installation sur smartphone
+
+1. Ouvrez `http://votre-serveur:3000` dans le navigateur de votre téléphone
+2. **iOS** : Safari > Partager > « Sur l'écran d'accueil »
+3. **Android** : Chrome > Menu > « Ajouter à l'écran d'accueil »
+
+L'app s'installe comme une application native (PWA).
+
+### Déploiement
+
+L'app peut être déployée sur n'importe quel hébergeur Node.js :
+
+- **Railway** / **Render** / **Fly.io** : connectez le repo, variable `ANTHROPIC_API_KEY`
+- **VPS** : `npm start` derrière un reverse proxy (nginx/caddy)
+- **Docker** : voir ci-dessous
+
+```bash
+# Docker (optionnel)
+docker build -t et-si .
+docker run -p 3000:3000 -e ANTHROPIC_API_KEY=sk-ant-... et-si
+```
 
 ## Structure du projet
 
 ```
 Et-SI/
-├── README.md                                    # Ce fichier
+├── server/
+│   └── index.js                    # Serveur Express + proxy Claude API (SSE streaming)
+├── public/
+│   ├── index.html                  # App shell (mobile-first)
+│   ├── css/style.css               # Styles responsive
+│   ├── js/
+│   │   ├── app.js                  # Logique chat + streaming + rendu markdown
+│   │   └── config.js               # Données personas embarquées
+│   ├── icons/icon.svg              # Icône PWA
+│   ├── manifest.json               # Manifest PWA
+│   └── sw.js                       # Service Worker (cache offline)
 ├── prompt/
-│   ├── system_prompt.md                         # Prompt système (cœur du modèle)
-│   ├── personas.json                            # 20 profils types détaillés
-│   └── economic_framework.json                  # Cadre d'analyse économique
-└── examples/
-    ├── 01_pnns_alimentation.md                  # PNNS et comportements alimentaires
-    ├── 02_circuits_courts.md                     # Circuits courts alimentaires (7→17%)
-    ├── 03_tarification_sociale_transports.md     # Tarification selon le revenu
-    └── 04_train_vs_avion.md                      # Taxe avion + subvention train
+│   ├── system_prompt.md            # Prompt système (coeur du modèle)
+│   ├── personas.json               # 20 profils types détaillés
+│   └── economic_framework.json     # Cadre d'analyse économique
+├── examples/
+│   ├── 01_pnns_alimentation.md
+│   ├── 02_circuits_courts.md
+│   ├── 03_tarification_sociale_transports.md
+│   └── 04_train_vs_avion.md
+├── package.json
+└── .env.example
 ```
-
-## Comment utiliser Et-SI
-
-### 1. Charger le prompt système
-
-Utilisez le contenu de `prompt/system_prompt.md` comme **system prompt** dans votre interface LLM (Claude, ChatGPT, ou autre). Le modèle fonctionnera mieux avec un LLM capable de raisonnement structuré et de calculs (Claude Opus ou GPT-4 recommandés).
-
-### 2. Charger les données de référence
-
-Fournissez en contexte (ou en pièce jointe) les fichiers :
-- `prompt/personas.json` — pour l'analyse par cas types
-- `prompt/economic_framework.json` — pour les paramètres économiques et les élasticités
-
-### 3. Décrire votre réforme
-
-Décrivez la réforme en langage naturel. Le modèle vous demandera des précisions si nécessaire. Exemples d'entrées :
-
-> « Et si 50 % des adultes suivaient les recommandations du PNNS ? »
-
-> « Et si les circuits courts passaient de 7 à 17 % de la consommation alimentaire ? »
-
-> « Et si le prix des transports en commun dépendait du revenu ? »
-
-> « Et si on taxait l'avion de 15 € pour baisser le prix du train ? »
-
-### 4. Itérer
-
-Après la première analyse, vous pouvez :
-- Modifier un paramètre (« Et si c'était 30 % au lieu de 50 % ? »)
-- Zoomer sur un persona (« Détaille l'impact pour Marie-Claire l'agricultrice »)
-- Comparer deux variantes (« Compare la taxe à 15 € vs 25 € »)
 
 ## Les 20 personas
 
@@ -90,8 +122,6 @@ Après la première analyse, vous pouvez :
 
 ## Niveaux de confiance
 
-Le modèle classe chaque estimation selon trois niveaux :
-
 - 🟢 **Solide** — Données empiriques directes (INSEE, DREES, études robustes)
 - 🟡 **Raisonnable** — Extrapolation fondée (élasticités analogues, consensus d'experts)
 - 🔴 **Exploratoire** — Estimation à dire d'expert, incertitude forte
@@ -103,7 +133,3 @@ Le modèle classe chaque estimation selon trois niveaux :
 - Les **effets de long terme** (10 ans) sont par nature plus incertains
 - Le modèle ne remplace pas une **étude d'impact réglementaire** ni une **évaluation économétrique complète**
 - Les interactions entre réformes simultanées ne sont pas modélisées
-
-## Licence
-
-Ce projet est un outil d'aide à la réflexion sur les politiques publiques.
