@@ -1,6 +1,5 @@
 /* ============================================
    Et-SI — System Prompt (embedded for direct API calls)
-   Auto-generated file — do not edit manually
    ============================================ */
 
 window.ETSI = window.ETSI || {};
