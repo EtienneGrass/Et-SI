@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1a365d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Et-SI">
+  <meta name="description" content="Simulateur de réformes de politiques publiques">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <title>Et-SI</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- Header -->
+    <header id="header">
+      <div class="header-left">
+        <button id="btn-menu" class="icon-btn" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <h1 class="logo">Et-SI</h1>
+      </div>
+      <div class="header-right">
+        <button id="btn-new-chat" class="icon-btn" aria-label="Nouvelle conversation" title="Nouvelle conversation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar-overlay" class="overlay hidden"></div>
+    <aside id="sidebar" class="hidden">
+      <nav class="sidebar-nav">
+        <button class="sidebar-item active" data-view="chat">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          Simulateur
+        </button>
+        <button class="sidebar-item" data-view="personas">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Personas
+        </button>
+        <button class="sidebar-item" data-view="examples">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          Exemples
+        </button>
+        <button class="sidebar-item" data-view="settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          Paramètres
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="sidebar-version">Et-SI v1.0</span>
+      </div>
+    </aside>
+
+    <!-- View: Chat -->
+    <main id="view-chat" class="view active">
+      <div id="chat-messages">
+        <div class="welcome-screen">
+          <div class="welcome-icon">?</div>
+          <h2>Et si…</h2>
+          <p>Décrivez une réforme de politique publique et je simulerai ses impacts sur 20 profils types, l'économie et l'environnement.</p>
+          <div class="example-chips">
+            <button class="chip" data-prompt="Et si 50 % des adultes adoptaient les recommandations du PNNS ?">PNNS & alimentation</button>
+            <button class="chip" data-prompt="Et si les circuits courts passaient de 7 % à 17 % de la consommation alimentaire ?">Circuits courts</button>
+            <button class="chip" data-prompt="Et si le prix des transports en commun dépendait du revenu de chacun, avec une tarification progressive de ±20 % à ±60 % ?">Tarification sociale TC</button>
+            <button class="chip" data-prompt="Et si on mettait une taxe de 15 € sur chaque billet d'avion intérieur pour baisser le prix du train d'environ 2,30 € par billet ?">Train vs avion</button>
+          </div>
+        </div>
+      </div>
+      <div id="chat-input-area">
+        <form id="chat-form">
+          <div class="input-wrapper">
+            <textarea id="chat-input" placeholder="Décrivez une réforme…" rows="1" autofocus></textarea>
+            <button type="submit" id="btn-send" aria-label="Envoyer" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- View: Personas -->
+    <main id="view-personas" class="view">
+      <div class="view-scroll">
+        <div class="view-header">
+          <h2>Les 20 personas</h2>
+          <p>Profils types représentatifs de la société française</p>
+        </div>
+        <div id="personas-grid"></div>
+      </div>
+    </main>
+
+    <!-- View: Examples -->
+    <main id="view-examples" class="view">
+      <div class="view-scroll">
+        <div class="view-header">
+          <h2>Exemples de réformes</h2>
+          <p>Cliquez pour lancer une simulation</p>
+        </div>
+        <div id="examples-list">
+          <button class="example-card" data-prompt="Et si 50 % des adultes adoptaient les recommandations du PNNS (plus de fruits/légumes, moins de viande rouge, moins de produits ultra-transformés, moins de sel et de sucre) ?">
+            <div class="example-card-icon">🥗</div>
+            <div class="example-card-body">
+              <h3>PNNS & alimentation</h3>
+              <p>50 % des adultes adoptent les recommandations nutritionnelles</p>
+              <div class="example-tags">
+                <span class="tag tag-sante">Santé</span>
+                <span class="tag tag-env">Environnement</span>
+              </div>
+            </div>
+          </button>
+          <button class="example-card" data-prompt="Et si les circuits courts alimentaires passaient de 7 % à 17 % de la consommation alimentaire en France ? Plus d'achats directs aux producteurs, AMAP, marchés, magasins de producteurs.">
+            <div class="example-card-icon">🌾</div>
+            <div class="example-card-body">
+              <h3>Circuits courts</h3>
+              <p>De 7 % à 17 % de la consommation en circuits courts</p>
+              <div class="example-tags">
+                <span class="tag tag-emploi">Emploi</span>
+                <span class="tag tag-env">Environnement</span>
+              </div>
+            </div>
+          </button>
+          <button class="example-card" data-prompt="Et si le prix des transports en commun dépendait du revenu de chacun ? Tarification progressive : les ménages modestes paieraient 20 à 60 % moins cher, les ménages aisés 20 à 60 % plus cher.">
+            <div class="example-card-icon">🚌</div>
+            <div class="example-card-body">
+              <h3>Tarification sociale des transports</h3>
+              <p>Prix des TC selon le revenu, de ±20 % à ±60 %</p>
+              <div class="example-tags">
+                <span class="tag tag-social">Social</span>
+                <span class="tag tag-mobilite">Mobilité</span>
+              </div>
+            </div>
+          </button>
+          <button class="example-card" data-prompt="Et si on mettait une taxe de 15 € sur chaque billet d'avion intérieur et qu'on utilisait les recettes pour baisser le prix du train d'environ 2,30 € par billet ?">
+            <div class="example-card-icon">🚄</div>
+            <div class="example-card-body">
+              <h3>Train vs avion</h3>
+              <p>Taxe avion 15 € → subvention train –2,30 €</p>
+              <div class="example-tags">
+                <span class="tag tag-env">Climat</span>
+                <span class="tag tag-mobilite">Mobilité</span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- View: Settings -->
+    <main id="view-settings" class="view">
+      <div class="view-scroll">
+        <div class="view-header">
+          <h2>Paramètres</h2>
+        </div>
+        <div class="settings-section">
+          <label class="settings-label" for="api-key-input">Clé API Anthropic</label>
+          <p class="settings-hint">Votre clé reste stockée localement sur votre appareil.</p>
+          <div class="input-wrapper settings-input-wrapper">
+            <input type="password" id="api-key-input" placeholder="sk-ant-api03-…" autocomplete="off">
+            <button type="button" id="btn-toggle-key" class="icon-btn" aria-label="Afficher la clé">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <button id="btn-save-key" class="btn-primary">Enregistrer</button>
+          <div id="key-status"></div>
+        </div>
+        <div class="settings-section">
+          <label class="settings-label">À propos</label>
+          <p class="settings-hint">
+            <strong>Et-SI v1.0</strong> — Simulateur de réformes de politiques publiques.<br>
+            Analyse par personas, microéconomie, macroéconomie, projections à 1/3/10 ans.<br><br>
+            Ce simulateur est un outil d'aide à la réflexion. Il ne se substitue pas à une évaluation économétrique complète.
+          </p>
+        </div>
+        <div class="settings-section">
+          <label class="settings-label">Installation</label>
+          <p class="settings-hint">Pour installer l'app sur votre téléphone, utilisez le menu de votre navigateur et sélectionnez « Ajouter à l'écran d'accueil ».</p>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/system-prompt.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>

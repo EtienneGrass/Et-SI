@@ -1,0 +1,13 @@
+{
+  "name": "Et-SI — Simulateur de Réformes",
+  "short_name": "Et-SI",
+  "description": "Simulateur de réformes de politiques publiques",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f8fa",
+  "theme_color": "#1a365d",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

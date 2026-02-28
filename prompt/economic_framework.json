@@ -1,0 +1,256 @@
+{
+  "meta": {
+    "description": "Cadre d'analyse économique pour le simulateur Et-SI",
+    "version": "1.0",
+    "note": "Paramètres de référence, élasticités, et grilles d'analyse pour les simulations de politiques publiques françaises"
+  },
+
+  "cadrage_france": {
+    "demographie": {
+      "population_totale": 68000000,
+      "nombre_menages": 30000000,
+      "taille_moyenne_menage": 2.2,
+      "population_active": 30400000,
+      "population_active_occupee": 28100000,
+      "taux_chomage_pct": 7.3,
+      "esperance_vie_hommes": 79.3,
+      "esperance_vie_femmes": 85.2
+    },
+    "revenus_et_niveaux_de_vie": {
+      "pib_mds_eur": 2800,
+      "revenu_disponible_brut_menages_mds": 1550,
+      "revenu_median_mensuel_eur_par_uc": 1850,
+      "seuil_pauvrete_60pct_median": 1110,
+      "taux_pauvrete_pct": 14.4,
+      "indice_gini": 0.29,
+      "deciles_niveau_de_vie_mensuel_eur_par_uc": {
+        "D1": 950,
+        "D2": 1200,
+        "D3": 1400,
+        "D4": 1600,
+        "D5": 1850,
+        "D6": 2100,
+        "D7": 2400,
+        "D8": 2800,
+        "D9": 3500,
+        "top_1pct": 7500
+      }
+    },
+    "finances_publiques": {
+      "depenses_publiques_pct_pib": 57,
+      "prelevements_obligatoires_pct_pib": 45,
+      "deficit_public_pct_pib": -4.7,
+      "dette_publique_pct_pib": 112,
+      "depenses_protection_sociale_mds": 850
+    },
+    "structure_economique": {
+      "part_agriculture_pib_pct": 1.7,
+      "part_industrie_pib_pct": 13.5,
+      "part_construction_pib_pct": 5.5,
+      "part_services_pib_pct": 79.3,
+      "nombre_entreprises": 4300000,
+      "dont_tpe_moins_10_salaries_pct": 96
+    },
+    "environnement": {
+      "emissions_ges_mtco2e": 400,
+      "emissions_transport_mtco2e": 130,
+      "emissions_agriculture_mtco2e": 80,
+      "emissions_industrie_mtco2e": 75,
+      "emissions_batiment_mtco2e": 65,
+      "emissions_energie_mtco2e": 50,
+      "objectif_2030_mtco2e": 270,
+      "objectif_neutralite": 2050
+    },
+    "transport": {
+      "part_modale_voiture_pct": 63,
+      "part_modale_tc_pct": 17,
+      "part_modale_marche_velo_pct": 8,
+      "part_modale_train_pct": 10,
+      "part_modale_avion_interieur_pct": 2,
+      "voyageurs_km_sncf_mds": 100,
+      "voyageurs_avion_interieur_millions": 25,
+      "prix_moyen_billet_tgv_eur": 55,
+      "prix_moyen_billet_avion_interieur_eur": 85
+    },
+    "alimentation": {
+      "depense_alimentaire_menage_eur_an": 5400,
+      "part_alimentation_budget_menage_pct": 14,
+      "part_circuits_courts_pct": 7,
+      "part_bio_pct": 6.5,
+      "emissions_alimentation_mtco2e": 24,
+      "gaspillage_alimentaire_kg_par_hab_an": 30
+    },
+    "sante": {
+      "depense_sante_pib_pct": 12.4,
+      "depense_sante_par_hab_eur": 4500,
+      "deces_maladies_cardiovasculaires_an": 140000,
+      "deces_cancers_an": 157000,
+      "cout_obesite_mds_eur_an": 20,
+      "cout_tabac_mds_eur_an": 26,
+      "cout_alcool_mds_eur_an": 15
+    }
+  },
+
+  "elasticites_reference": {
+    "alimentation": {
+      "elasticite_prix_demande_globale": {"min": -0.3, "max": -0.7, "source": "INSEE, études européennes"},
+      "elasticite_prix_produits_bio": {"min": -0.5, "max": -1.2, "source": "INRAE"},
+      "elasticite_revenu_demande_alimentaire": {"min": 0.3, "max": 0.5, "source": "INSEE"},
+      "elasticite_prix_croisee_bio_conventionnel": {"min": 0.1, "max": 0.4, "source": "Estimations"}
+    },
+    "transport": {
+      "elasticite_prix_tc_court_terme": {"min": -0.2, "max": -0.4, "source": "CEREMA, GART"},
+      "elasticite_prix_tc_long_terme": {"min": -0.4, "max": -0.8, "source": "Littérature internationale"},
+      "elasticite_prix_carburant_court_terme": {"min": -0.2, "max": -0.3, "source": "CGDD"},
+      "elasticite_prix_carburant_long_terme": {"min": -0.6, "max": -0.8, "source": "CGDD"},
+      "elasticite_prix_avion_domestique": {"min": -0.8, "max": -1.2, "source": "DGAC, IATA"},
+      "elasticite_prix_train_grande_vitesse": {"min": -0.3, "max": -0.6, "source": "SNCF, Arafer"},
+      "elasticite_croisee_train_avion": {"min": 0.3, "max": 0.8, "source": "Études report modal"}
+    },
+    "logement_energie": {
+      "elasticite_prix_electricite": {"min": -0.2, "max": -0.4, "source": "CRE"},
+      "elasticite_prix_gaz": {"min": -0.3, "max": -0.5, "source": "CRE"},
+      "elasticite_revenu_depense_logement": {"min": 0.5, "max": 0.8, "source": "INSEE"}
+    },
+    "travail": {
+      "elasticite_salaire_offre_travail": {"min": 0.1, "max": 0.3, "source": "Études françaises"},
+      "elasticite_cout_travail_demande": {"min": -0.3, "max": -0.7, "source": "OFCE, IPP"}
+    },
+    "macro": {
+      "multiplicateur_keynesien_depenses": {"min": 0.8, "max": 1.2, "source": "OFCE"},
+      "multiplicateur_keynesien_recettes": {"min": -0.5, "max": -0.8, "source": "OFCE"},
+      "propension_marginale_consommation_d1_d3": {"min": 0.8, "max": 0.95, "source": "INSEE"},
+      "propension_marginale_consommation_d8_d10": {"min": 0.4, "max": 0.6, "source": "INSEE"}
+    }
+  },
+
+  "grille_analyse_temporelle": {
+    "horizon_1_an": {
+      "label": "Court terme",
+      "description": "Effets mécaniques et réactions immédiates",
+      "hypotheses": [
+        "Les prix s'ajustent rapidement",
+        "Les comportements changent à la marge (élasticités court terme)",
+        "Pas de restructuration de l'offre",
+        "Effets budgétaires directs sur les finances publiques",
+        "Les capacités de production sont fixes"
+      ]
+    },
+    "horizon_3_ans": {
+      "label": "Moyen terme",
+      "description": "Adaptations comportementales et ajustements structurels",
+      "hypotheses": [
+        "Les agents ajustent durablement leurs comportements",
+        "L'offre commence à s'adapter (investissements, entrées/sorties)",
+        "Les effets de second tour se manifestent",
+        "Les filières se restructurent partiellement",
+        "Les infrastructures existantes sont mieux utilisées"
+      ]
+    },
+    "horizon_10_ans": {
+      "label": "Long terme",
+      "description": "Transformation structurelle et nouvel équilibre",
+      "hypotheses": [
+        "Transformation profonde des comportements",
+        "Restructuration complète de l'offre",
+        "Nouvelles infrastructures possibles",
+        "Effets intergénérationnels",
+        "Innovation et disruption technologique possibles",
+        "Contexte macroéconomique susceptible d'évoluer significativement"
+      ]
+    }
+  },
+
+  "grille_impact_macro": {
+    "dimensions": [
+      {
+        "id": "pib",
+        "label": "Croissance / PIB",
+        "indicateurs": ["Variation PIB (Md€)", "Impact taux de croissance (points)"],
+        "methode": "Multiplicateur keynésien + effets d'offre long terme"
+      },
+      {
+        "id": "emploi",
+        "label": "Emploi",
+        "indicateurs": ["Créations/destructions nettes (ETP)", "Impact taux de chômage (points)"],
+        "methode": "Contenu en emploi sectoriel + élasticité coût du travail"
+      },
+      {
+        "id": "finances_publiques",
+        "label": "Finances publiques",
+        "indicateurs": ["Impact recettes (M€)", "Impact dépenses (M€)", "Solde net (M€)"],
+        "methode": "Effet direct + retour fiscal (TVA, cotisations, IR)"
+      },
+      {
+        "id": "inflation",
+        "label": "Prix / Inflation",
+        "indicateurs": ["Impact IPC (points)", "Secteurs les plus touchés"],
+        "methode": "Pass-through des coûts + effets concurrentiels"
+      },
+      {
+        "id": "environnement",
+        "label": "Environnement",
+        "indicateurs": ["Variation émissions GES (MtCO₂e/an)", "Autres impacts environnementaux"],
+        "methode": "Facteurs d'émission + variation d'activité"
+      },
+      {
+        "id": "sante",
+        "label": "Santé publique",
+        "indicateurs": ["Décès évités/an", "DALY économisés", "Économies Assurance maladie (M€)"],
+        "methode": "Études épidémiologiques + fractions attribuables"
+      },
+      {
+        "id": "inegalites",
+        "label": "Inégalités / Cohésion sociale",
+        "indicateurs": ["Variation Gini (points)", "Impact ratio interdécile D9/D1", "Acceptabilité sociale"],
+        "methode": "Microsimulation par décile + analyse qualitative"
+      },
+      {
+        "id": "commerce_exterieur",
+        "label": "Commerce extérieur",
+        "indicateurs": ["Impact balance commerciale (M€)", "Compétitivité-prix"],
+        "methode": "Variation importations/exportations sectorielles"
+      }
+    ]
+  },
+
+  "methodes_estimation": {
+    "effet_mecanique": {
+      "description": "Calcul arithmétique direct sans changement de comportement",
+      "exemple": "Si taxe de 15€ sur billet d'avion × 25M passagers = 375 M€ de recettes brutes"
+    },
+    "effet_comportemental": {
+      "description": "Application d'élasticités pour tenir compte des réactions des agents",
+      "exemple": "Hausse de 18% du prix de l'avion × élasticité -1.0 → baisse de 18% de la demande"
+    },
+    "effet_second_tour": {
+      "description": "Réactions en chaîne (ajustement de l'offre, effets sur l'emploi, retour fiscal)",
+      "exemple": "Baisse demande avion → restructuration compagnies → perte d'emplois → moindre consommation"
+    },
+    "effet_structurel": {
+      "description": "Transformation profonde des marchés, des filières ou des normes sociales",
+      "exemple": "Report modal massif → investissement ferroviaire → nouvelle géographie des mobilités"
+    }
+  },
+
+  "niveaux_confiance": {
+    "solide": {
+      "emoji": "🟢",
+      "label": "Solide",
+      "description": "Fondé sur des données empiriques directes et des études robustes",
+      "exemples": ["Données INSEE/DREES", "Méta-analyses", "Évaluations ex post de réformes similaires"]
+    },
+    "raisonnable": {
+      "emoji": "🟡",
+      "label": "Raisonnable",
+      "description": "Extrapolation fondée sur des données indirectes ou des analogies solides",
+      "exemples": ["Élasticités estimées dans des contextes comparables", "Modélisations calibrées", "Consensus d'experts"]
+    },
+    "exploratoire": {
+      "emoji": "🔴",
+      "label": "Exploratoire",
+      "description": "Estimation à dire d'expert, incertitude forte",
+      "exemples": ["Réformes sans précédent", "Effets de long terme", "Changements comportementaux profonds"]
+    }
+  }
+}
